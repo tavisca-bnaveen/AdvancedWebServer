@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using System;
+﻿using System.Net;
 namespace AdvancedWebServer
 {
-    public class HttpAppHandler
+    public class Dipatcher
     {
         HttpListenerContext context;
         string filename;
         string domain;
-        public HttpAppHandler(HttpListenerContext context)
+        public Dipatcher(HttpListenerContext context)
         {
             this.context = context;
         }
@@ -17,7 +15,7 @@ namespace AdvancedWebServer
             var URL = context.Request.Url;
             var uriPath = URL.AbsoluteUri;
             filename = context.Request.RawUrl;
-            domain = uriPath.Remove(uriPath.Length - filename.Length+1, filename.Length-1);
+            domain = uriPath.Remove(uriPath.Length - filename.Length + 1, filename.Length - 1);
             filename = context.Request.RawUrl.Remove(0, 1);
             //Console.WriteLine(uriPath);
         }

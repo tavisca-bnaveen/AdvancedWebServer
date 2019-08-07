@@ -28,12 +28,12 @@ namespace AdvancedWebServer
                 {
                     Console.WriteLine($"Active Connections:{queue.GetQueue().Count}");
                     HttpListenerContext httpListenerContext = queue.Dequeue();
-                    HttpAppHandler httpAppHandler = new HttpAppHandler(httpListenerContext);
-                    httpAppHandler.ParseUrl();
-                    if (httpAppHandler.GetFilename() == "favicon.ico")
+                    Dipatcher dipatcher = new Dipatcher(httpListenerContext);
+                    dipatcher.ParseUrl();
+                    if (dipatcher.GetFilename() == "favicon.ico")
                         continue;
                     var domainDictionary = domainPathStorage.GetDomainsAndPaths();
-                    FileHandler fileHandler = new FileHandler(domainDictionary[httpAppHandler.GetDomain()], httpAppHandler.GetFilename());
+                    FileHandler fileHandler = new FileHandler(domainDictionary[dipatcher.GetDomain()], dipatcher.GetFilename());
                     Response response = new Response(httpListenerContext);
                     response.SendReponse(fileHandler.ConvertFileDataBytes());
                     

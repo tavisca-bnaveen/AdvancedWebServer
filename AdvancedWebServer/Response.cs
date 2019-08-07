@@ -12,12 +12,16 @@ namespace AdvancedWebServer
         }
         public void SendReponse(byte[] bytes)
         {
-            var response = context.Response;
+            if (bytes != null)
+            {
+                var response = context.Response;
 
-            response.ContentLength64 = bytes.Length;
-           Stream output = response.OutputStream;
+                response.ContentLength64 = bytes.Length;
+                Stream output = response.OutputStream;
 
-            output.Write(bytes, 0, bytes.Length);
+                output.Write(bytes, 0, bytes.Length);
+            }
+
         }
     }
 }
