@@ -7,7 +7,7 @@ namespace AdvancedWebServer
 {
     public class PostHandler
     {
-        JObject jObject;
+       public JObject jObject;
         HttpListenerContext httpListenerContext;
         public PostHandler(HttpListenerContext httpListenerContext)
         {
@@ -20,14 +20,11 @@ namespace AdvancedWebServer
             }
             jObject = JObject.Parse(text);
         }
-        public string GetParameter()
+       
+        public byte[] ConvertJsonObject(JObject Value)
         {
-            return jObject["year"].ToString();
-        }
-        public byte[] ConvertJsonObject(bool answer)
-        {
-            jObject["year"] = answer;
-            var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(jObject);
+            
+            var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(Value);
             byte[] bytes = Encoding.ASCII.GetBytes(jsonString);
             return bytes;
         }

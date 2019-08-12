@@ -1,16 +1,21 @@
-﻿namespace AdvancedWebServer
+﻿using Newtonsoft.Json.Linq;
+
+namespace AdvancedWebServer
 {
-    public class LeapYear
+    public class LeapYear:IApiFunction
     {
-        public bool IsLeapYear(string _year)
+        public JObject Compute(JObject jObjectinput)
         {
-            var year = System.Int32.Parse(_year);
+
+            var year = System.Int32.Parse(jObjectinput["year"].ToString());
+            JObject jObject = new JObject();
             if (year % 4 == 0 && year % 100 != 0)
-                return true;
+                jObject["IsLeapYear"]="true";
             else if (year % 400 == 0)
-                return true;
+                jObject["IsLeapYear"] = "true";
             else
-                return false;
-        }
+                jObject["IsLeapYear"] = "False";
+            return jObject;
+        }   
     }
 }

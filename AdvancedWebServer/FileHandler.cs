@@ -25,7 +25,12 @@ namespace AdvancedWebServer
             {
 
                 Console.WriteLine("FileNotFound");
-                return null;
+
+                FileStream fs = new FileStream("NotFound.html", FileMode.Open, FileAccess.Read);
+                byte[] bytes = System.IO.File.ReadAllBytes("NotFound.html");
+
+                fs.Read(bytes, 0, System.Convert.ToInt32(fs.Length));
+                return bytes;
             }
         }
     }
