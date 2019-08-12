@@ -19,8 +19,7 @@ namespace AdvancedWebServer
            
                 web = new HttpListener();
 
-                //web.Prefixes.Add("http://localhost:8080/");
-                //web.Prefixes.Add("http://localhost:3030/");
+                
                 foreach (var key in (AllDomainsAndPaths.GetDomainsAndPaths()).Keys)
                 {
                 web.Prefixes.Add(key);

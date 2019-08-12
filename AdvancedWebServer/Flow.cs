@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace AdvancedWebServer
 {
@@ -10,10 +11,10 @@ namespace AdvancedWebServer
         DomainPathStorage domainPathStorage = new DomainPathStorage();
         public Flow()
         {
-            string dummy = @"C:\Users\bnaveen\source\repos\AdvancedWebServer\AdvancedWebServer\bin\Debug\netcoreapp2.2\8080/";
-            domainPathStorage.AddPath("http://localhost:8080/", dummy);
-            dummy = @"C:\Users\bnaveen\source\repos\AdvancedWebServer\AdvancedWebServer\bin\Debug\netcoreapp2.2\3030/";
-            domainPathStorage.AddPath("http://localhost:3030/", dummy);
+            string path = @"C:\Users\bnaveen\source\repos\AdvancedWebServer\AdvancedWebServer\bin\Debug\netcoreapp2.2\8080/";
+            domainPathStorage.AddPath("http://localhost:8080/", path);
+            path = @"C:\Users\bnaveen\source\repos\AdvancedWebServer\AdvancedWebServer\bin\Debug\netcoreapp2.2\3030/";
+            domainPathStorage.AddPath("http://localhost:3030/", path);
         }
         public void Listening()
         {
@@ -32,12 +33,25 @@ namespace AdvancedWebServer
                     dipatcher.ParseUrl();
                     if (dipatcher.GetFilename() == "favicon.ico")
                         continue;
-                    var domainDictionary = domainPathStorage.GetDomainsAndPaths();
-                    FileHandler fileHandler = new FileHandler(domainDictionary[dipatcher.GetDomain()], dipatcher.GetFilename());
                     Response response = new Response(httpListenerContext);
-                    response.SendReponse(fileHandler.ConvertFileDataBytes());
-                    
+                    var domainDictionary = domainPathStorage.GetDomainsAndPaths();
 
+                    if (httpListenerContext.Request.ContentType == "application/json")
+                    {
+
+                        PostHandler postHandler = new PostHandler(httpListenerContext);
+                        LeapYear leapYear = new LeapYear();
+                        var answer = leapYear.IsLeapYear(postHandler.GetParameter());
+
+                        response.SendReponse(postHandler.ConvertJsonObject(answer));
+                    }
+                    else
+                    {
+                        FileHandler fileHandler = new FileHandler(domainDictionary[dipatcher.GetDomain()], dipatcher.GetFilename());
+                        response.SendReponse(fileHandler.ConvertFileDataBytes());
+
+                    }
+                   
                 }
             }
             
